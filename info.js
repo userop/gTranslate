@@ -2,5 +2,6 @@
     "action_": "Alt+W",
     "to_": "zh-cn",
     "from_": "en",
-    "quit_": "Ctrl+Q"
+    "quit_": "Ctrl+Q",
+    "exchange": "Ctrl+E"
 }

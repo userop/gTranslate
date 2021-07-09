@@ -43,14 +43,24 @@ class GoogleTrans(QWidget):
 
         self._off = 0
         self._trans_on = True
+
+        # build shortcut
         self._action = QShortcut(self)
         self._action.setKey(self.info.action_)
         self._quit = QShortcut(self)
         self._quit.setKey(self.info.quit_)
+        self._exchange = QShortcut(self)
+        self._exchange.setKey(self.info.exchange)
 
         self.t_box = QComboBox()
         self.f_box = QComboBox()
         self.domain = QComboBox()
+        # 加载语言简拼
+        lang = list(LANGUAGES.keys())
+        self.domain.addItems(URLS_SUFFIX)
+        self.t_box.addItems(lang)
+        self.f_box.addItems(lang)
+
         self.menu = QMenu()
         # layout
         lay = QVBoxLayout(self)
@@ -68,8 +78,18 @@ class GoogleTrans(QWidget):
         self.clip.selectionChanged.connect(self._translate)
         self._action.activated.connect(self._on_off)
         self._quit.activated.connect(self.quit)
+        self._exchange.activated.connect(self.ex)
+
+        # 小图标、隐藏图标选项
         self.customContextMenuRequested.connect(self.context)
         self.tray.activated.connect(self.tray_active)
+        self.menu.aboutToHide.connect(self.setdown)
+
+    @Slot()
+    def setdown(self):
+        self.info.to_ = self.t_box.currentText()
+        self.info.from_ = self.f_box.currentText()
+        transer.url_suffix = self.domain.currentText()
 
     @Slot()
     def context(self, pos):
@@ -96,33 +116,38 @@ class GoogleTrans(QWidget):
         lay.addLayout(line3)
         self.menu.setLayout(lay)
 
-        lang = list(LANGUAGES.keys())
-        self.domain.addItems(URLS_SUFFIX)
+        self.domain.setCurrentText(transer.url_suffix)
+        self.t_box.setCurrentText(self.info.to_)
+        self.f_box.setCurrentText(self.info.from_)
 
-        self.t_box.addItems(lang)
-        self.f_box.addItems(lang)
-
-        self.menu.exec_(pos)
+        self.menu.exec_(self.mapToGlobal(pos))
 
     @Slot()
     def _translate(self):
         if not self._trans_on:
             return
         text = self.clip.text(QClipboard.Selection)
-        result = transer.translate(text, self.info.to_, self.info.from_)
-        self.label.setText(result)
-        self.adjustSize()
+        if text:
+            result = transer.translate(text, self.info.to_, self.info.from_)
+            self.label.setText(result)
+            self.adjustSize()
 
-        self.move(QCursor.pos())
-        self.setVisible(True)
-        self.activateWindow()
-        self.setWindowState((self.windowState() & ~Qt.WindowMinimized) | Qt.WindowActive)
-        self.raise_()
+            self.move(QCursor.pos())
+            self.setVisible(True)
+            self.activateWindow()
+            self.setWindowState((self.windowState() & ~Qt.WindowMinimized) | Qt.WindowActive)
+            self.raise_()
 
     @Slot()
     def tray_active(self):
         # todo double click show that widget
         self._translate(QCursor.pos())
+
+    @Slot()
+    def ex(self):
+        tgt = self.info.to_
+        self.info.to_ = self.info.from_
+        self.info.from_ = tgt
 
     @Slot()
     def quit(self):
@@ -141,7 +166,3 @@ class GoogleTrans(QWidget):
         self.setVisible(False)
         self.hide()
         event.ignore()
-
-# todo window hide when clicked something
-#   window flow the mouse At pos
-#   try to change
