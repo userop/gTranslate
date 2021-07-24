@@ -16,7 +16,7 @@ from google_trans_new.google_trans_new import google_translator, URLS_SUFFIX
 
 
 transer = google_translator()
-CONFIG = "info.js"
+CONFIG = "info"
 
 
 class Info:
