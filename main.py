@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # coding: UTF-8
 # language_level: python3
 import sys
