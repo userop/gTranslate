@@ -8,7 +8,7 @@ import json
 
 from PySide2.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QApplication, \
     QShortcut, QComboBox, QMenu, QSystemTrayIcon
-from PySide2.QtGui import QClipboard, QCursor, QCloseEvent
+from PySide2.QtGui import QClipboard, QCursor, QCloseEvent, QKeyEvent
 from PySide2.QtCore import Slot, Qt
 
 from google_trans_new import LANGUAGES
@@ -157,6 +157,10 @@ class GoogleTrans(QWidget):
     @Slot()
     def _on_off(self):
         self._trans_on = not self._trans_on
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if event.key() == Qt.Key_Escape:
+            self.hide()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         if self._off:
