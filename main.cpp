@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     // register c++ class as a qml item
-//    qmlRegisterType<Document>("Defined.document", 1, 0, "Document");
     qmlRegisterType<TextFromClip>("Defined.translator", 1, 0, "ClipTranslate");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));

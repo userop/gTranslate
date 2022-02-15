@@ -16,6 +16,11 @@ TRANSLATIONS += \
 CONFIG += lrelease
 CONFIG += embed_translations
 
+INCLUDEPATH += \
+    /home/hgc/Project/QHotkey/QHotkey
+
+LIBS += \
+    -L/home/hgc/Project/QHotkey/QHotkey/ -lQHotkey
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = devUI

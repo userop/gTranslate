@@ -34,6 +34,8 @@ public:
 
 private:
     QString host, uriPath;
+    int ptr;
+    QStringList agent;
 
 signals:
     void translated(QString text);
