@@ -2,3 +2,7 @@
 *.o
 *.so*
 *.qmake.stash
+moc_*
+qrc_*
+*.pro.user
+qmake_qmake_qm_files.qrc
